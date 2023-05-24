@@ -2,24 +2,22 @@ package client
 
 import (
 	"bicycle/bicycle_go_order_service/config"
-	"bicycle/bicycle_go_order_service/genproto/order_service"
+	"bicycle/bicycle_go_order_service/genproto/user_service"
 
 	"google.golang.org/grpc"
 )
 
 type ServiceManagerI interface {
-	OrderService() order_service.OrderServiceClient
-	ProductService() order_service.ProductServiceClient
+	UserService() user_service.UserServiceClient
 }
 
 type grpcClients struct {
-	orderService   order_service.OrderServiceClient
-	productService order_service.ProductServiceClient
+	userService user_service.UserServiceClient
 }
 
 func NewGrpcClient(cfg config.Config) (ServiceManagerI, error) {
-	connUserService, err := grpc.Dial(
-		cfg.OrderServiceHost+cfg.OrderServicePort,
+	connOrderService, err := grpc.Dial(
+		cfg.UserServiceHost+cfg.UserServicePort,
 		grpc.WithInsecure(),
 	)
 	if err != nil {
@@ -27,14 +25,10 @@ func NewGrpcClient(cfg config.Config) (ServiceManagerI, error) {
 	}
 
 	return &grpcClients{
-		orderService: order_service.NewOrderServiceClient(connUserService),
+		userService: user_service.NewUserServiceClient(connOrderService),
 	}, nil
 }
 
-func (g *grpcClients) OrderService() order_service.OrderServiceClient {
-	return g.orderService
-}
-
-func (g *grpcClients) ProductService() order_service.ProductServiceClient {
-	return g.productService
+func (g *grpcClients) UserService() user_service.UserServiceClient {
+	return g.userService
 }
