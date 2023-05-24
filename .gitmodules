@@ -1,0 +1,3 @@
+[submodule "bicycle_go_order_service"]
+	path = bicycle_go_order_service
+	url = git@github.com:KhalimovMukhammadjon/bicycle_go_order_service.git
