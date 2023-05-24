@@ -11,11 +11,11 @@ import (
 )
 
 type Store struct {
-	db   *pgxpool.Pool
-	user storage.UserRepoI
+	db    *pgxpool.Pool
+	order storage.OrderRepoI
 }
 
-func NewPostgres(ctx context.Context, cfg config.Config) (storage.StoragI, error) {
+func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
 	config, err := pgxpool.ParseConfig(fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
 		cfg.PostgresUser,
@@ -58,9 +58,9 @@ func (s *Store) Log(ctx context.Context, msg string, data map[string]interface{}
 	log.Println(args...)
 }
 
-func (s *Store) User() storage.UserRepoI {
-	if s.user == nil {
-		s.user = NewUserRepo(s.db)
+func (s *Store) Order() storage.OrderRepoI {
+	if s.order == nil {
+		s.order = NewOrderRepo(s.db)
 	}
-	return s.user
+	return s.order
 }

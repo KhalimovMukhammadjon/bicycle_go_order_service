@@ -11,12 +11,12 @@ import (
 type userService struct {
 	cfg      config.Config
 	log      logger.LoggerI
-	strg     storage.StoragI
+	strg     storage.StorageI
 	services client.ServiceManagerI
 	user_service.UnimplementedUserServiceServer
 }
 
-func NewUserService(cfg config.Config, log logger.LoggerI, strg storage.StoragI, svcs client.ServiceManagerI) *userService {
+func NewUserService(cfg config.Config, log logger.LoggerI, strg storage.StorageI, svcs client.ServiceManagerI) *userService {
 	return &userService{
 		cfg:      cfg,
 		log:      log,
