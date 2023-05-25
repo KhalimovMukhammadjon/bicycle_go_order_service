@@ -43,7 +43,7 @@ func (o *orderRepo) Create(ctx context.Context, req *order_service.CreateOrder) 
 
 	_, err = o.db.Exec(ctx, query,
 		uuid.String(),
-		req.ProdutcID,
+		req.ProductID,
 		req.UserID,
 		req.TotalSum,
 	)
@@ -59,6 +59,8 @@ func (o *orderRepo) Create(ctx context.Context, req *order_service.CreateOrder) 
 }
 
 func (o *orderRepo) GetById(ctx context.Context, req *order_service.PrimaryKey) (resp *order_service.Order, err error) {
+	resp = &order_service.Order{}
+
 	query :=
 		`
 		SELECT
@@ -71,8 +73,8 @@ func (o *orderRepo) GetById(ctx context.Context, req *order_service.PrimaryKey) 
 	`
 	err = o.db.QueryRow(ctx, query, req.Id).Scan(
 		&resp.Id,
-		&resp.ProdutcID,
 		&resp.UserID,
+		&resp.ProductID,
 		&resp.TotalSum,
 	)
 	if err != nil {
@@ -80,4 +82,15 @@ func (o *orderRepo) GetById(ctx context.Context, req *order_service.PrimaryKey) 
 	}
 
 	return
+}
+
+func (o *orderRepo) Delete(ctx context.Context, req *order_service.PrimaryKey) error {
+	query := "DELETE FROM orders WHERE id = $1"
+
+	_, err := o.db.Exec(ctx, query, req.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

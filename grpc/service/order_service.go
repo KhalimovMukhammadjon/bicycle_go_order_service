@@ -3,11 +3,14 @@ package service
 import (
 	"bicycle/bicycle_go_order_service/config"
 	"bicycle/bicycle_go_order_service/genproto/order_service"
+	"bicycle/bicycle_go_order_service/genproto/user_service"
 	"bicycle/bicycle_go_order_service/grpc/client"
 	"bicycle/bicycle_go_order_service/pkg/logger"
 	"bicycle/bicycle_go_order_service/storage"
 	"context"
+	"fmt"
 
+	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -46,14 +49,31 @@ func (o orderService) GetById(ctx context.Context, req *order_service.PrimaryKey
 		o.log.Error("!!!GetOrderById!!!", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
+
+	userResp, err := o.services.UserService().GetById(ctx, &user_service.PrimaryKey{
+		Id: resp.UserID,
+	})
+
+	if err != nil {
+		o.log.Error("!!!GetOrderById!!!", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+	fmt.Println("User Response", userResp)
+	// resp.UserID = userResp.FirstName
+
 	return resp, nil
 }
 
-// func (o orderService) Create(){
-// 	o.services.UserService().Create(context.Background(),&user_service.CreateUserRequest{})
-// }
+func (o orderService) Delete(ctx context.Context, req *order_service.PrimaryKey) (resp *empty.Empty, err error) {
+	o.log.Info("---DeleteOrder--->", logger.Any("req", req))
 
-// func (o orderService) CreateOrder() {
-// 	o.services.UserService().GetAll(context.Background(),&user_service.GetAllUserRequest{})
-// 	fmt.Println()
-// }
+	resp = &empty.Empty{}
+
+	err = o.strg.Order().Delete(ctx, req)
+	if err != nil {
+		o.log.Error("!!!DeleteOrder--->", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	return resp, nil
+}

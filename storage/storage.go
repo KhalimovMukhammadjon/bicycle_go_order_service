@@ -15,7 +15,7 @@ type OrderRepoI interface {
 	GetById(ctx context.Context, req *order_service.PrimaryKey) (resp *order_service.Order, err error)
 	//GetList(ctx context.Context, req *order_service.GetAllOrderRequest) (resp *order_service.GetAllOrderResponse, err error)
 	// Update(ctx context.Context, req *order_service.PrimaryKey) error
-	// Delete(ctx context.Context, req *order_service.PrimaryKey) error
+	Delete(ctx context.Context, req *order_service.PrimaryKey) error
 }
 
 type ProductRepoI interface {
