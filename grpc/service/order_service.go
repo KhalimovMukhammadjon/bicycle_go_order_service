@@ -59,7 +59,10 @@ func (o orderService) GetById(ctx context.Context, req *order_service.PrimaryKey
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 	fmt.Println("User Response", userResp)
-	// resp.UserID = userResp.FirstName
+
+	resp.FirstName = userResp.FirstName
+	resp.LastName = userResp.LastName
+	resp.PhoneNumber = userResp.PhoneNumber
 
 	return resp, nil
 }
