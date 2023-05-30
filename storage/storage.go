@@ -8,6 +8,7 @@ import (
 type StorageI interface {
 	CloseDB()
 	Order() OrderRepoI
+	Product() ProductRepoI
 }
 
 type OrderRepoI interface {
@@ -22,6 +23,6 @@ type ProductRepoI interface {
 	Create(ctx context.Context, req *order_service.CreateProduct) (resp *order_service.PrimaryKeyProduct, err error)
 	GetById(ctx context.Context, req *order_service.PrimaryKeyProduct) (resp *order_service.Product, err error)
 	GetList(ctx context.Context, req *order_service.GetAllProductRequest) (resp *order_service.GetAllProductResponse, err error)
-	// Update(ctx context.Context, req *order_service.PrimaryKeyProduct) error
-	// Delete(ctx context.Context, req *order_service.PrimaryKeyProduct) error
+	Update(ctx context.Context, req *order_service.UpdateProductRequest) error
+	Delete(ctx context.Context, req *order_service.PrimaryKeyProduct) error
 }

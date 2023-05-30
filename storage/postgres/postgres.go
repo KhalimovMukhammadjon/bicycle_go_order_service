@@ -11,8 +11,9 @@ import (
 )
 
 type Store struct {
-	db    *pgxpool.Pool
-	order storage.OrderRepoI
+	db      *pgxpool.Pool
+	order   storage.OrderRepoI
+	product storage.ProductRepoI
 }
 
 func NewPostgres(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -63,4 +64,11 @@ func (s *Store) Order() storage.OrderRepoI {
 		s.order = NewOrderRepo(s.db)
 	}
 	return s.order
+}
+
+func (s *Store) Product() storage.ProductRepoI {
+	if s.product == nil {
+		s.product = NewProductRepo(s.db)
+	}
+	return s.product
 }
